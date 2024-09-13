@@ -2,12 +2,25 @@
 
 ---
 
-# CREATE
+## Table of Content
+
+- [1. Create](#create)
+- [2. Publish](#publish)
+- [3. Stash](#stash)
+- [4. Branch](#branch)
+- [5. Rebase](#rebase)
+- [6. Revert](#revert)
+- [7. View Changes](#changes)
+- [8. Configuration](#configuration)
+- [9. Security](#security)
+- [10. Other Resources](#other-resources)
+- [11. Credit](#credit)
+
+## CREATE
 
 ### New repository
 
-`git init` create a new repository in current directory.
-`git add .` add all latest changes to the next commit.
+`git init` create a new repository in current directory while `git add .` add all latest changes to the next commit.
 
 ```sh
 cd ~/projects/project01
@@ -27,7 +40,7 @@ git clone ~/existing/repo ~new/repo
 git clone you@host:dir/project.git # default protocol is ssh
 ```
 
-# UPDATE
+## UPDATE
 
 ### Fetch latest changes from origin
 
@@ -50,7 +63,7 @@ git am -3 patch.mbox
 git am --resolve # in case of conflict, resolve the conflict
 ```
 
-# PUBLISH
+## PUBLISH
 
 ### Commit all local changes
 
@@ -83,7 +96,7 @@ git tag <version_name>
 # e.g git tag v7.0.34
 ```
 
-# STASH
+## STASH
 
 ### Stash uncommitted changes before moving to another branch
 
@@ -103,7 +116,7 @@ git stash push -m
 git stash pop
 ```
 
-# BRANCH
+## BRANCH
 
 ### Switch to the BRANCH branch
 
@@ -136,7 +149,7 @@ git checkout <new> <base>
 git branch -d <branch>
 ```
 
-# REBASE
+## REBASE
 
 ### Rebase with git
 
@@ -154,7 +167,7 @@ git rebase -i HEAD~2
 
 Which runs your debase in interactive mode for the most recent 2 commits (which is really helpful for squashing and renaming your commits), making it more readable.
 
-# REVERT
+## REVERT
 
 For an easy revert if you just made a mistake (perhaps you forked a repo, then ended up pushing to the original instead of to a new one):
 
@@ -194,7 +207,7 @@ git revert $id # creates a new commit
 git commit -a --amend
 ```
 
-# CHANGES
+## CHANGES
 
 ### View the changes in the working directory
 
@@ -254,7 +267,7 @@ git branch
 git grep <pattern> [path]
 ```
 
-# CONFIG
+## CONFIGURATION
 
 Set the author name and email to be used for all commits in **current repo**.
 
@@ -290,13 +303,13 @@ Open the global configuration file in a text editor for manual editing.
 git config --global --edit
 ```
 
-# SIGN COMMITS WITH SSH KEYS
+## SECURITY
 
-[Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-[configured Git to sign commits](https://docs.gitlab.com/ee/user/project/repository/signed_commits/ssh.html#configure-git-to-sign-commits-with-your-ssh-key)
-Sign commits with SSH keys
+### Sign Commits with SSH key
 
-# SECURITY
+- [Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+- [configured Git to sign commits](https://docs.gitlab.com/ee/user/project/repository/signed_commits/ssh.html#configure-git-to-sign-commits-with-your-ssh-key)
 
 ### Remove sensitive/personal information from GitHub in your commit history e.g passwords or secrets
 
@@ -331,11 +344,15 @@ git push origin --force --all
 
 And that's it! Your repo history is clean without any trace of your sensitive information.
 
-# FYI
+## FYI
 
     origin is the default upstream repository
     HEAD is the current branch
 
-# Credit
+## Other Resources
+
+- [Pro Git, 2nd Edition](https://github.com/progit/progit2)
+
+## Credit
 
 This cheatsheet was originally written by [Beau Williams](https://github.com/beauwilliams/Dotfiles) - I found it on his [Dotfiles](https://github.com/beauwilliams/Dotfiles/blob/master/Cheatsheets%2Fgit-cheatsheet.md), probaly serving as a quick reminder on git commands.
