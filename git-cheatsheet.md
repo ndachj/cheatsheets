@@ -1,21 +1,26 @@
+# Git Cheatsheet
+
+---
+
 # CREATE
 
-### on local
+### New repository
 
-`git init` creates new repository in current directory
-`git add .` add all latest changes to the next commit
+`git init` create a new repository in current directory.
+`git add .` add all latest changes to the next commit.
 
 ```sh
-cd ~/projects/my_project
+cd ~/projects/project01
 git init
 git add .
 ```
 
-### From existing repo
+### From existing repository
 
-`git clone` is used to clone a repositroy from a remote.
+`git clone` clone a repositroy from a remote.
 
-> [!NOTE] > **Remote repositories** can be on your local machine. It is entirely possible that you can be working with a “remote” repository that is, in fact, on the same host you are. The word **“remote”** does not necessarily imply that the repository is somewhere else on the network or Internet, only that it is **elsewhere**.
+> [!NOTE]
+> Remote repositories can be on your local machine. It is entirely possible that you can be working with a “remote” repository that is, in fact, on the same host you are. The word **“remote”** does not necessarily imply that the repository is somewhere else on the network or Internet, only that it is **elsewhere**.
 
 ```sh
 git clone ~/existing/repo ~new/repo
@@ -103,7 +108,7 @@ git stash pop
 ### Switch to the BRANCH branch
 
 ```sh
-git checkout <BRANCH>
+git checkout <branch>
 ```
 
 ### Merge branch B1 into branch B2
@@ -116,13 +121,13 @@ git merge <B1>
 ### Create branch based on HEAD
 
 ```sh
-git branch <BRANCH>
+git branch <branch>
 ```
 
 ### Create branch based on another
 
 ```sh
-git checkout <new><base>
+git checkout <new> <base>
 ```
 
 ### Delete a branch
@@ -183,7 +188,7 @@ git revert HEAD # creates a new commit
 git revert $id # creates a new commit
 ```
 
-# Fix the last commit
+### Fix the last commit
 
 ```sh
 git commit -a --amend
@@ -191,58 +196,56 @@ git commit -a --amend
 
 # CHANGES
 
-### Files changed in working directory
+### View the changes in the working directory
 
 ```sh
 git status
 ```
 
-### Changes to tracked files
+### View the changes between the working directory and the INDEX(staging area)
 
 ```sh
 git diff
 ```
 
-### Changes between Ida and Ida
+### View the changes between two arbitrary commit
 
 ```sh
-git diff <ID1><ID2>
+git diff <commit_id1> <commit_id2>
 ```
 
-# History of changes
+### View the commits history(logs)
 
 ```sh
 git log
+git log  --graph --pretty=oneline --abbrev-commit --decorate # nice output
 ```
 
-### History of changes with files changed
+### View the commits history in a specific file
 
 ```sh
+# same as 'git log' but show raw format diff output and skips merges
 git whatchanged
 ```
 
-### Who changed what and when in a file
+### View who changed what and when in a file
 
 ```sh
 git blame <file>
 ```
 
-### A commit identifies by ID
+### View a commit identified by ID
 
 ```sh
 git show <ID>
 ```
 
-### A specific file from a specific ID
+### View all local branches
 
 ```sh
-git diff <ID>:<file>
-```
-
-### All local branches
-
-```sh
-git branch # star "*" means the current branch
+# green asterisk "*" means the current branch
+# cyan plus "+" means checked out branches
+git branch
 ```
 
 ### Search for patterns
@@ -274,7 +277,7 @@ git config --global alias.<alias-name> <git-command>
 # e.g git config --global alias.last 'log -1 HEAD --stat' # show last commit
 ```
 
-Set the default text editor used by commands for all users on the machine.
+Set the default text editor used by Git commands for all users on the machine.
 
 ```sh
 # <editor> arg should be the command that launches the desired editor (e.g. vi).
@@ -287,79 +290,21 @@ Open the global configuration file in a text editor for manual editing.
 git config --global --edit
 ```
 
-# PGP SIGNATURE FOR COMMITS
+# SIGN COMMITS WITH SSH KEYS
 
-### Set up GPG
-
-First you have to install GPG, if you don’t already have it. `sudo apt-get install gnupg`. Verify your installation like this:
-
-```sh
-gpg --version
-gpg (GnuPG) 2.2.17
-libgcrypt 1.8.4
-more output ...
-```
-
-If your system doesn't know them yet, you have to import your public and private keys (I assume you have them stored in files called id_ed25519 and id_ed25519.pub). If you don’t have a key pair, you can generate a new one. In that case, you can skip the import and directly jump to Set up Git. It's also possible to use your Keybase GPG key, if you have one (Stephen Rees-Carter wrote a nice article about it).
-
-```sh
-gpg --import id_ed25519 # private key
-gpg --import id_ed25519.pub # public key
-```
-
-Note: when importing the private key, a GUI window appears that asks for the corresponding passphrase you set when creating your key pair.
-
-### Set up Git
-
-Now you can tell Git your signing key ID. It’s a 16-digit alphanumeric string that can be found with gpg --list-signatures (look for lines starting with “sig”).
-
-```sh
-git config --global user.signingkey 26A64778F76A7911
-```
-
-If you want, you can tell Git to sign commits per default (since Git 2.0), so you don’t always have to add the -s flag in the command line:
-
-```sh
-git config --global commit.gpgsign true
-```
-
-> [!NOTE]
-> I use the --global flag here to apply these settings to all the repositories. Of course you can apply these settings only to the current repository without it.
-
-### Set up GitHub
-
-Now you have to give GitHub (or whatever Git server you’re using) your public key. You can print it with mpg --armor --export or get-content -path public.key (or open it with your favorite text editor) and copy it to your clipboard.
-
-Now go to GitHub, click on the top right menu, go to `Settings` > `SSH and GPG keys` > New GPG key and paste your key — it should look like this:
-
-`-----BEGIN PGP PUBLIC KEY BLOCK-----
-...a lot of characters...
------END PGP PUBLIC KEY BLOCK-----`
-
-### Error: secret key not available
-
-`git commit -am "commit message" -s
-gpg: skipped "26A64778F76A7911": secret key not available
-gpg: signing failed: secret key not available
-error: gpg failed to sign the data
-fatal: failed to write commit object`
-
-**Solution**: Tell Git the full path to the GPG executable
-
-```sh
-# on Windows
-git config --global gpg.program "C:\Program Files (x86)\gnupg\bin\gpg.exe"
-```
+[Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+[configured Git to sign commits](https://docs.gitlab.com/ee/user/project/repository/signed_commits/ssh.html#configure-git-to-sign-commits-with-your-ssh-key)
+Sign commits with SSH keys
 
 # SECURITY
 
-### Remove sensitive files from GitHub from your commit history [e.g passwords or secrets]
+### Remove sensitive/personal information from GitHub in your commit history e.g passwords or secrets
 
 > [!TIP]
-> for password, it might be easier to change the it if you can..
+> for password, it might be easier to change the it, if you can..
 
-First thing you do is change the visibility of the repo. So, if it's a public repo, make it private. This way, you're sure no one else sees the file while you're working on deleting it.
-Then run the following command. You have to include the path to the file and not just the file name. replacing config/secretFile.json with the path to the file you want to be removed. In my case, `secretFile.json` is inside of a folder named `config`.
+First, change the **repository visibility** to `private`. This way, you're sure no one else sees the file while you're working on deleting it.
+Then run the following command. You have to include the path to the file and not just the file name. In my case, `secretFile.json` is inside of a folder named `config`.
 
 ```sh
 git filter-branch --force --index-filter \
@@ -370,7 +315,7 @@ git filter-branch --force --index-filter \
 > [!WARNING]
 > The command above deletes the file from your local repository too, so ensure you have copied the content to a notepad or whatever you use before running the command.
 
-Then create and add your file to .gitignore so you don't accidentally push it again to GitHub. You can do that with:
+Then create and add your file to `.gitignore` so you don't accidentally push it again to GitHub. You can do that with:
 
 ```sh
 echo "super-secrets-file" >> .gitignore
@@ -382,11 +327,15 @@ Once you are satisfied with your changes, you can then push them to GitHub:
 
 ```sh
 git push origin --force --all
-And that's it! Your repo history is clean without any trace of your sensitive file.
 ```
+
+And that's it! Your repo history is clean without any trace of your sensitive information.
 
 # FYI
 
-    master is the default development branch
     origin is the default upstream repository
     HEAD is the current branch
+
+# Credit
+
+This cheatsheet was originally written by [Beau Williams](https://github.com/beauwilliams/Dotfiles) - I found it on his [Dotfiles](https://github.com/beauwilliams/Dotfiles/blob/master/Cheatsheets%2Fgit-cheatsheet.md), probaly serving as a quick reminder on git commands.
